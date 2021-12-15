@@ -8,6 +8,7 @@ from .textExtractor_brain import handle_uploaded_file
 # Create your views here.
 def index(request):
     return render(request, 'pdfExtractor_app/index.html')
+    # return render(request, 'pdfExtractor_app/upload.html')
 
 def extract(request):
     pass
@@ -32,4 +33,5 @@ def read_file(request):
     file_content = f.read()
     f.close()
     context = {'file_content': file_content}
-    return render(request, "pdfExtractor_app/upload.html", context)
+    # return render(request, "pdfExtractor_app/upload.html", context)
+    return render(request, "pdfExtractor_app/index.html", context)
