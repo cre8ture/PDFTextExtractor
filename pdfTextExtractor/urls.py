@@ -20,5 +20,6 @@ from pdfTextExtractor_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('upload_file/',  views.read_file, name='upload_file')  # views.upload_file, name='upload_file')
+    path('upload_pdf/',  views.upload_pdf, name='upload_pdf'), # views.upload_file, name='upload_file')
+    path('file/', views.upload_pdf2, name='upload_pdf2')
 ]
