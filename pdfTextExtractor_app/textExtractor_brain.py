@@ -44,13 +44,15 @@ def getPDFText(pdf_filename, pages):
             first_page = x[0]
             last_page = x[1]
             print('PAGES', first_page,last_page)
+            text = text + "\n\n(" + str(first_page) + "-" + str(last_page) + ")\n"
             for i in range(first_page, last_page):
-                text = "\n\n(" + str(first_page) + "-" + str(last_page) + ")\n" + doc[i].get_text('text', flags=2)  # .replace("\n", " ") <--- removed this to focus on pure raw
+                text = text + doc[i].get_text('text', flags=2)  # .replace("\n", " ") <--- removed this to focus on pure raw
             
-            print(text) 
+            # print(text) 
     # except:
         # text = "Error in processing pdf. Make sure file and page numbers are valid. \n - File should be \'.pdf\' file. \n - Page numbers should be in the form of \'page_start-page_end\' seperated by commas. You can also input single pagse."
     
         return text
 
-getPDFText('(PEARSON SERIES IN ARTIFICIAL INTELLIGENCE) Stuart Russell and Peter Norvig - Artificial Intelligence_ A Modern Approach-Pearson (2020).pdf', '3-5, 8, 20-44')
+# TEST
+# getPDFText('(PEARSON SERIES IN ARTIFICIAL INTELLIGENCE) Stuart Russell and Peter Norvig - Artificial Intelligence_ A Modern Approach-Pearson (2020)_OT586Ar.pdf', '100-200')
