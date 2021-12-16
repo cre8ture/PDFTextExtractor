@@ -2,15 +2,43 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.core.files.storage import default_storage
 from .forms import UploadFileForm
+import os
 
 # Imaginary function to handle an uploaded file.
 from .textExtractor_brain import getPDFText
 
 # Create your views here.
 def index(request):
+    print("upload_file")
+    print(request.POST)
+    print("request.method", request.method)
+    if request.method == 'POST':
+        
 
-    print("hello", request.POST)
-    return render(request, 'pdfExtractor_app/index.html')
+        form = UploadFileForm(request.POST, request.FILES)
+        # form = UploadFileForm({'title', 'tiempo2D1':Data2})  #<<< how to extra queryDict
+        print("it's a post:)", form.is_valid(), form.errors)
+
+        if form.is_valid():
+            
+
+            # save the file directly
+            file = request.FILES['file']
+            print("fileNAMMME", file.name, request.POST['pages'])
+            file_name = default_storage.save(file.name, file)
+
+            text = getPDFText(file_name, request.POST['pages'])
+
+            print("TEXT IS", text)
+
+            # delete created file
+
+            os.remove("pdf_uploads/" + file.name)
+            return render(request, 'pdfExtractor_app/index.html', {'form': form, 'file_content' : text}) # HttpResponseRedirect('pdfExtractor_app/result.html')
+    else:
+        print("form not valid")
+        form = UploadFileForm()
+    return render(request, 'pdfExtractor_app/index.html', {'form': form})
     # return render(request, 'pdfExtractor_app/upload.html')
 
 def extract(request):
@@ -33,18 +61,18 @@ def upload_pdf(request):
 
             # save the file directly
             file = request.FILES['file']
-            print("fileNAMMME", file.name, request.POST['title'])
+            print("fileNAMMME", file.name, request.POST['pages'])
             file_name = default_storage.save(file.name, file)
 
-            text = getPDFText(file_name, request.POST['title'])
+            text = getPDFText(file_name, request.POST['pages'])
 
             print("TEXT IS", text)
-            
-            return render(request, 'pdfExtractor_app/index.html') # HttpResponseRedirect('pdfExtractor_app/result.html')
+
+            return render(request, 'pdfExtractor_app/index.html', {'file_content' : text}) # HttpResponseRedirect('pdfExtractor_app/result.html')
     else:
         print("form not valid")
         form = UploadFileForm()
-    return render(request, 'pdfExtractor_app/upload.html', {'form': form})
+    return render(request, 'pdfExtractor_app/index.html', {'form': form})
 
 
     

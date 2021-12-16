@@ -10,7 +10,7 @@ def handle_uploaded_file(f):
             destination.write(chunk)
     return getPDFText(filename, 1,3, 'sample')
 
-
+# breaks user inputted pages into readable format for extractor
 def parsePages(pages):
     print("the pages to be processed are", pages)
 
@@ -23,7 +23,7 @@ def parsePages(pages):
             pageList[i][j] = pageList[i][j].strip()
             pageList[i][j] = int(pageList[i][j])
         if len(pageList[i]) == 1:
-            pageList[i] = [pageList[i][0], pageList[i][0]] # if just 1 page aka '5' then make it [5,5]
+            pageList[i] = [pageList[i][0], pageList[i][0]+1] # if just 1 page aka '5' then make it [5,6]
 
     return pageList
 
@@ -31,11 +31,11 @@ def parsePages(pages):
 
 # translates page into readable text
 def getPDFText(pdf_filename, pages):
-    print("extracting text from", pdf_filename)
+        print("extracting text from", pdf_filename)
 
-    text = ''
+        text = ''
     # extract pages by comma, then create forloop to iterate through the fitz correct amount of times
-    try:
+    # try:
 
         pageList = parsePages(pages)
         doc = fitz.open("pdf_uploads/" + pdf_filename)
@@ -43,11 +43,14 @@ def getPDFText(pdf_filename, pages):
         for x in pageList:
             first_page = x[0]
             last_page = x[1]
+            print('PAGES', first_page,last_page)
             for i in range(first_page, last_page):
-                text = "\n\n(" + first_page + "-" + last_page + ")\n" + doc[i].get_text('text', flags=2)  # .replace("\n", " ") <--- removed this to focus on pure raw
+                text = "\n\n(" + str(first_page) + "-" + str(last_page) + ")\n" + doc[i].get_text('text', flags=2)  # .replace("\n", " ") <--- removed this to focus on pure raw
             
             print(text) 
-    except:
-        text = "Error in processing pdf. Make sure file and page numbers are valid. \n - File should be \'.pdf\' file. \n - Page numbers should be in the form of \'page_start-page_end\' seperated by commas. You can also input single pagse."
+    # except:
+        # text = "Error in processing pdf. Make sure file and page numbers are valid. \n - File should be \'.pdf\' file. \n - Page numbers should be in the form of \'page_start-page_end\' seperated by commas. You can also input single pagse."
     
-    return text
+        return text
+
+getPDFText('(PEARSON SERIES IN ARTIFICIAL INTELLIGENCE) Stuart Russell and Peter Norvig - Artificial Intelligence_ A Modern Approach-Pearson (2020).pdf', '3-5, 8, 20-44')

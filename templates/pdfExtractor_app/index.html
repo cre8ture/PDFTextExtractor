@@ -16,14 +16,50 @@
         border: 3px solid blue;
         padding-top: 25px;
         padding-left: 25px;
+        padding-right: 25px;
         padding-bottom: 10px;
       }
+
+        .button {
+          border: none;
+          color: white;
+          padding: 16px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          transition-duration: 0.4s;
+          cursor: pointer;
+        }
+        
+        .button1 {
+          background-color: white; 
+          color: black; 
+          border: 2px solid #4CAF50;
+        }
+        
+        .button1:hover {
+          background-color: #4CAF50;
+          color: white;
+        }
+        
+        .button2 {
+          background-color: white; 
+          color: black; 
+          border: 2px solid #008CBA;
+        }
+        
+        .button2:hover {
+          background-color: #008CBA;
+          color: white;
+        }
     </style>
   </head>
   <body>
     <h3>PDF Text Extractor 🦆</h3>
     <div>
-      <form action="/file/">
+      {% comment %} <form action="/file/">
         {% csrf_token %}
         <input type="file" id="myFile" name="filename" /> <br />
         <br />
@@ -35,14 +71,25 @@
           <input type="text" id="pages" name="pages" />
           <input type="submit" />
         </p>
-      </form>
-    </div>
+      </form> {% endcomment %}
+
+        <form method="POST" class="post-form" enctype="multipart/form-data">  
+          {% csrf_token %}  
+          {{ form.as_p }}  
+          <button type="submit" class="button button2">Extract Text</button>      
+        </form> 
+
+        <p style="padding: ">
+          Input PDF pages in the text box above. For example:
+          <mark>1-3,5,15,230-255</mark>
+        </p>
+      </div>
 
   </p> Text will appear below </p>
 
   <div class="text">
   <article>
-    <p>{{ file_content }}</p>
+    <p> <code>{{ file_content | safe }}</code></p>
   </article>
 </div>
 
